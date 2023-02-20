@@ -1,0 +1,121 @@
+<html>
+<lang="en">
+    <meta charset="UTF-8">
+    <meta name="author" content="Syed">
+    <meta name="description" content="Telco on Cloudera">
+    <title>Telco on Cloudera</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/test.css') }}">
+</head>
+<body>
+<div style="text-align: center;">
+    <h1 style="text-center-align: center;color: orange;">COD Workshop Elevate24</h1>
+    <div class="form-container mt-4">
+      <form action='/requestdetails' method="POST"> 
+        <input required class="form-control mt-2 type-1" type="number" name="CALLING_MSISDN" id="CALLING_MSISDN" placeholder="Enter The Calling MSISDN">
+        <button class="button-68" type="submit">Search</button>
+      </form>
+    </div>
+</div>
+​
+{% if calls %} 
+​
+{% for calls in calls %}
+{% for sms in sms %}
+<h5 align="center">you made <span class="circle">{{calls[3]}}</span> calls and <span class="circle">{{sms[3]}}</span> messages in the last 7 days</h5>
+{% endfor %}    
+{% endfor %}
+{% endif %}
+​
+<div style="display:flex;justify-content:space-between">
+  {% if avg %}
+  <h5 style="text-align: left;color: black;margin-left: 20px"> Voice calls </h5>
+  <table class="styled-table">
+      {% for avg in avg %}
+      <thead>
+      <tr>
+        <th class="table-info">Calling MSISDN:</th>
+        <td class="text-primary">{{avg[0]}}</td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <th class="table-info">Avg Duration:</th>
+        <td>{{avg[3]}}</td>
+      </tr>
+      <tr>
+        <th class="table-info">Total Duration:</th>
+        <td>{{avg[4]}}</td>
+      </tr>
+      </tbody>
+    {% endfor %}
+    </table>
+  {% endif %}
+  <!-- Table for Total SMS and Analytics -->
+​
+{% if sms %}
+  <h5 style="text-align: left;color: black;margin-left: 20px"> Text Messages </h5><br>
+  <table class="styled-table">
+      {% for sms in sms %}
+      <thead>
+      <tr>
+        <th class="table-info">Calling MSISDN:</th>
+        <td class="text-primary">{{sms[0]}}</td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <th class="table-info">Number of Successful Messages:</th>
+        <td>{{sms[3]}}</td>
+      </tr>
+      </tbody>
+    {% endfor %}
+    </table>
+  {% endif %}
+</div>
+​
+<div class="text-center">
+{% if results1 %}
+<button class="button-68" id="showDetailsBtn">Show Detailed View </button>
+
+<br><br>
+<table id="callDetailsTable" style="display: none;margin-left:auto;margin-right:auto;" class="styled-table">
+  <!-- style="border:1px solid black;margin-left:auto;margin-right:auto;"-->
+  <thead>
+    <tr>
+      <th>CALLED MSISDN</th>
+      <th>DATE START</th>
+      <th>DATE END</th>
+      <th>DURATION</th>
+      <th>CALL TYPE</th>
+      <th>CALL RESULT</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for result in results1 %}
+    <tr>
+      <td>{{ result[0] }}</td>
+      <td>{{ result[1] }}</td>
+      <td>{{ result[2] }}</td>
+      <td>{{ result[3] }}</td>
+      <td>{{ result[4] }}</td>
+      <td>{{ result[5] }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+    {% else %}
+    <p class="mt-5">{{ message }}</p>
+      {% endif %}
+</div>
+</body>
+<script>
+  document.getElementById("showDetailsBtn").addEventListener("click", function() {
+    var table = document.getElementById("callDetailsTable");
+    if (table.style.display === "none") {
+      table.style.display = "table";
+    } else {
+      table.style.display = "none";
+    }
+  });
+</script>
+</html>
